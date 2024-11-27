@@ -42,10 +42,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public JwtAuthenticationResponse signin(SigninRequest siginRequest){
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(siginRequest.getEmail()
-                , siginRequest.getPassword()));
-
+        System.out.println("test");
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(siginRequest.getEmail()
+                    , siginRequest.getPassword()));
+        }catch (Exception e){e.printStackTrace();
+        }
+        System.out.println("test 2");
         var account = accountRepository.findByEmail(siginRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Email not found"));
+        System.out.println(account!=null);
         var jwt = jwtService.generateToken(account);
         var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), account);
 
